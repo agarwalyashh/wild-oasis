@@ -1,6 +1,6 @@
 function Dashboard() {
   return (
-    <div>
+    <div className="bg-slate-300 h-full">
       Dashboard
     </div>
   )

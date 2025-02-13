@@ -13,8 +13,16 @@
 */
 
 /* Colors adapted from https://tailwindcss.com/docs/customizing-colors */
+#root {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+.active{
+  @apply bg-slate-200 rounded-lg
+}
 
-:root {
+@theme {
   /* Indigo */
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
@@ -67,17 +75,16 @@
   /* For dark mode */
   --image-grayscale: 0;
   --image-opacity: 100%;
+  --font-poppins: 'Poppins', sans-serif;
+  --font-sono: 'Sono', sans-serif;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-
   /* Creating animations for dark mode */
   transition: background-color 0.3s, border 0.3s;
+  /* font-family: 'Poppins', 'Sono', sans-serif; */
 }
 
 html {

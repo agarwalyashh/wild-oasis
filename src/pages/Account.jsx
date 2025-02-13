@@ -1,7 +1,7 @@
 function Account() {
   return (
     <div>
-      
+      lorem
     </div>
   )
 }
