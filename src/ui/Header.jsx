@@ -1,6 +1,6 @@
 function Header() {
   return (
-    <div className="">
+    <div className="row-span-1">
       Header
     </div>
   )

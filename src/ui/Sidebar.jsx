@@ -8,7 +8,7 @@ import { CiSettings } from "react-icons/ci";
 
 function Sidebar() {
   return (
-    <div className="mx-auto py-12">
+    <div className="mx-auto py-12 col-span-2">
       <div className="grid gap-6 tracking-wider justify-center items-center">
         <img src={logo} alt="Logo" className="h-32"/>
         <NavLink to="dashboard" className="flex items-center gap-4 p-4"><span><IoHomeOutline size={24} className="text-indigo-400" /></span>Home</NavLink>
