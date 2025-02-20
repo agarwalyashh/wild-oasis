@@ -1,0 +1,142 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { createCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
+
+function CreateCabinForm() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      maxCapacity: "",
+      regularPrice: "",
+      discount: 0,
+      description: "",
+      image: "",
+    },
+  }); // default values are needed if we want to use reset()
+
+  const queryClient = useQueryClient();
+  const { mutate, isLoading: isCreating } = useMutation({
+    mutationFn: (newCabin) => createCabin(newCabin),
+    onSuccess: () => {
+      toast.success("New Cabin Created");
+      queryClient.invalidateQueries({ queryKey: ["cabin"] });
+      reset();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  function onSubmit(data){
+    mutate({...data,image:data.image[0]})
+  }
+
+  function onError(error) {
+    console.log(error);
+  }
+
+  return (
+    <form
+      className="flex flex-col my-4 rounded-lg w-full bg-grey-0 font-poppins p-6 space-y-6"
+      onSubmit={handleSubmit(onSubmit, onError)}
+    >
+      <div className="grid grid-cols-12 gap-y-6 items-center w-[95%]">
+        <label className="text-2xl col-span-4">Cabin Name</label>
+        <div className="col-span-8">
+          <input
+            type="text"
+            className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full"
+            {...register("name", { required: "This field is required" })}
+          />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+        </div>
+        
+        {/** Since there are 2 columns only defined, this automatically moves down */}
+        <label className="text-2xl col-span-4">Max Capacity</label>
+        <div className="col-span-8">
+          <input
+            type="number"
+            className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full"
+            {...register("maxCapacity", {
+              required: "This field is required",
+              min: { value: 1, message: "Min Capacity must be 1" },
+            })}
+          />
+          {errors.maxCapacity && (
+            <p className="text-red-500">{errors.maxCapacity.message}</p>
+          )}
+        </div>
+        <label className="text-2xl col-span-4">Regular Price</label>
+        <div className="col-span-8">
+          <input
+            type="number"
+            className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full"
+            {...register("regularPrice", { required: "This field is required" })}
+          />
+          {errors.regularPrice && (
+            <p className="text-red-500">{errors.regularPrice.message}</p>
+          )}
+        </div>
+        <label className="text-2xl col-span-4">Discount</label>
+        <div className="col-span-8">
+          <input
+            type="number"
+            defaultValue={0}
+            className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full"
+            {...register("discount", {
+              validate: (value) => {
+                const regularPrice = Number(getValues("regularPrice"));
+                return value <= regularPrice || "Discount should be less than regular price";
+              },
+            })}
+          />
+          {errors.discount && <p className="text-red-500">{errors.discount.message}</p>}
+        </div>
+        <label className="text-2xl col-span-4">Description</label>
+        <div className="col-span-8">
+          <textarea
+            className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full h-24"
+            {...register("description", { required: "This field is required" })}
+          />
+          {errors.description && (
+            <p className="text-red-500">{errors.description.message}</p>
+          )}
+        </div>
+        <label className="text-2xl col-span-4">Cabin Photo</label>
+        <div className="col-span-8 text-start">
+          <label className="bg-brand-600 p-4 text-gray-200 rounded-lg cursor-pointer" htmlFor="image-upload">Upload Image</label>
+          <input
+            hidden
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full cursor-pointer"
+            {...register("image", { required: "This field is required" })}
+          />
+          {errors.image && <p className="text-red-500">{errors.image.message}</p>}
+        </div>
+      </div>
+      <div className="flex justify-end gap-4 w-full">
+        <button
+          type="reset"
+          className="bg-grey-0 rounded-lg border border-grey-300 px-6 py-3"
+        >
+          Cancel
+        </button>
+        <button
+          className="bg-brand-600 text-grey-50 rounded-lg px-6 py-3 hover:bg-brand-800"
+          disabled={isCreating}
+        >
+          Add Cabin
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export default CreateCabinForm;

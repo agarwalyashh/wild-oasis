@@ -4,9 +4,9 @@ import Sidebar from "./Sidebar";
 
 function AppLayout() {
   return (
-    <div className="grid grid-cols-12 font-poppins h-screen">
+    <div className="grid grid-cols-12 font-poppins h-screen overflow-hidden">
       <Sidebar/>
-      <div className="col-span-10 grid grid-rows-12">
+      <div className="col-span-10 grid grid-rows-12 overflow-y-scroll">
         <Header/>
         <main className="row-span-11">
           <Outlet />
