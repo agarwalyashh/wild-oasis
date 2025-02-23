@@ -1,9 +1,14 @@
+/* eslint-disable react/prop-types */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { createCabin } from "../../services/apiCabins";
+import { createCabin , editCabin} from "../../services/apiCabins";
 import toast from "react-hot-toast";
 
-function CreateCabinForm() {
+function CreateCabinForm({cabinToEdit={},setEditingCabinId}) { // make an empty object by default, as sometimes value might not exist
+    
+  const {id:editId,...editValues}=cabinToEdit
+  const isEditData = Boolean(editId)
+
   const {
     register,
     handleSubmit,
@@ -11,7 +16,7 @@ function CreateCabinForm() {
     getValues,
     formState: { errors },
   } = useForm({
-    defaultValues: {
+    defaultValues: isEditData ? editValues : {
       name: "",
       maxCapacity: "",
       regularPrice: "",
@@ -20,9 +25,10 @@ function CreateCabinForm() {
       image: "",
     },
   }); // default values are needed if we want to use reset()
+  
 
   const queryClient = useQueryClient();
-  const { mutate, isLoading: isCreating } = useMutation({
+  const { mutate:create, isLoading: isCreating } = useMutation({
     mutationFn: (newCabin) => createCabin(newCabin),
     onSuccess: () => {
       toast.success("New Cabin Created");
@@ -32,13 +38,30 @@ function CreateCabinForm() {
     onError: (err) => toast.error(err.message),
   });
 
-  function onSubmit(data){
-    mutate({...data,image:data.image[0]})
+  const { mutate:edit, isLoading: isEditing } = useMutation({
+    mutationFn: ({newCabin,id}) => editCabin(newCabin,id),
+    onSuccess: () => {
+      toast.success("Cabin Edited Successfully");
+      queryClient.invalidateQueries({ queryKey: ["cabin"] });
+      reset();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  function onSubmit(data) {
+    if (isEditData) {
+      const image = data.image?.[0] || data.image;
+      edit({ newCabin: { ...data, image }, id: editId });
+      setEditingCabinId(null)
+    } else {
+      create({ ...data, image: data.image[0] });
+    }
   }
 
   function onError(error) {
     console.log(error);
   }
+  const isWorking = isCreating||isEditing
 
   return (
     <form
@@ -109,14 +132,14 @@ function CreateCabinForm() {
         </div>
         <label className="text-2xl col-span-4">Cabin Photo</label>
         <div className="col-span-8 text-start">
-          <label className="bg-brand-600 p-4 text-gray-200 rounded-lg cursor-pointer" htmlFor="image-upload">Upload Image</label>
+          <label className="bg-brand-600 p-4 text-gray-200 rounded-lg cursor-pointer" htmlFor="image-upload">{isWorking?"Uploaded":"Upload Image"}</label>
           <input
             hidden
             id="image-upload"
             type="file"
             accept="image/*"
             className="bg-grey-0 p-4 rounded-lg border border-grey-300 w-full cursor-pointer"
-            {...register("image", { required: "This field is required" })}
+            {...register("image", { required: isEditData?false:"This field is required" })}
           />
           {errors.image && <p className="text-red-500">{errors.image.message}</p>}
         </div>
@@ -130,9 +153,9 @@ function CreateCabinForm() {
         </button>
         <button
           className="bg-brand-600 text-grey-50 rounded-lg px-6 py-3 hover:bg-brand-800"
-          disabled={isCreating}
+          disabled={isWorking}
         >
-          Add Cabin
+         {isEditData? "Edit Cabin":"Add Cabin"}
         </button>
       </div>
     </form>
