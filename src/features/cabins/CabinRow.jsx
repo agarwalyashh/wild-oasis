@@ -5,6 +5,8 @@ import { deleteCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
+import { MdDelete } from "react-icons/md";
+import { MdModeEdit } from "react-icons/md";
 
 function CabinRow({ cabins }) {
   const queryClient = useQueryClient();
@@ -36,20 +38,21 @@ function CabinRow({ cabins }) {
             <div className="gap-2 flex">
               <button
                 onClick={() => setEditingCabinId(editingCabinId === cabin.id ? null : cabin.id)}
-                className="bg-grey-500 py-2 text-grey-0 rounded-md w-20 outline-none"
+                className="focus:!outline-none"
               >
-              EDIT
+              <span><MdModeEdit size={24} color="grey"/></span>
               </button>
+              <span className="text-4xl">/</span>
               <button
                 onClick={() => mutate(cabin.id)}
                 disabled={isDeleting}
-                className="bg-grey-500 py-2 text-grey-0 rounded-md w-30 outline-none"
+                className="focus:!outline-none"
               >
-                DELETE
+                <span><MdDelete size={24} color="grey"/></span>
               </button>
             </div>
           </div>
-          {editingCabinId === cabin.id && <CreateCabinForm cabinToEdit={cabin} setEditingCabinId={setEditingCabinId} />}
+          {editingCabinId === cabin.id && <CreateCabinForm cabinToEdit={cabin} setEditingCabinId={setEditingCabinId} cabinId={cabin.id} editingCabinId={editingCabinId}/>}
         </div>
       ))}
     </>
