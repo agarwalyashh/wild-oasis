@@ -1,25 +1,33 @@
-import { queryOptions } from "@tanstack/react-query";
 import { getToday } from "../utils/helper";
 import supabase from "./supabase";
 
-export async function getBookings({ filter, sortBy }) {
-  console.log(sortBy);
+export async function getBookings({ filter, sortBy, page }) {
   
   // Here we do server/api side filtering and sorting
   let query = supabase
     .from("bookings")
-    .select("*,cabins(name),guests(fullName,email)"); // this way, we can get data from other tables connected using foreign key
+    .select("*,cabins(name),guests(fullName,email)",{count:"exact"}); // this way, we can get data from other tables connected using foreign key
+    // count exact gives the total length of data
   if (filter)
     query = query[filter.method || "eq"](filter.field, filter.value); // eq is for equal, gte is for greater than equal to and likewise we have other functions
   
   if(sortBy)
     query=query.order(sortBy.field,{ascending:sortBy.direction=="asc"})
-  const { data, error } = await query;
+
+  if(page)
+  {
+    const PAGE_SIZE=3;
+    const from=(page-1)*PAGE_SIZE
+    const to=from+PAGE_SIZE-1
+    query=query.range(from,to);
+  }
+
+  const { data, error,count } = await query;
   if (error) {
     console.log(error);
     throw new Error("Bookings could not be loaded");
   }
-  return data;
+  return {data,count};
 }
 
 export async function getBooking(id) {

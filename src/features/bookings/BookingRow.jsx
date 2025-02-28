@@ -56,7 +56,7 @@ function BookingRow({ bookings }) {
 
   return (
     <>
-      {bookings.map((data) => (
+      {bookings?.map((data) => (
         <div key={data.id} className="h-40">
           <div
             className="grid gap-4 grid-cols-[0.3fr_0.7fr_1fr_0.7fr_0.3fr] h-full font-sono items-center text-start px-10 bg-grey-0 w-full border-b-1 border-grey-300"
