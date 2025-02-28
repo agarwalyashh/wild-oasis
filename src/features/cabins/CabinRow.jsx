@@ -7,6 +7,7 @@ import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
+import { createPortal } from "react-dom";
 
 function CabinRow({ cabins }) {
   const queryClient = useQueryClient();
@@ -52,7 +53,8 @@ function CabinRow({ cabins }) {
               </button>
             </div>
           </div>
-          {editingCabinId === cabin.id && <CreateCabinForm cabinToEdit={cabin} setEditingCabinId={setEditingCabinId} cabinId={cabin.id} editingCabinId={editingCabinId}/>}
+          {editingCabinId === cabin.id && createPortal(<CreateCabinForm cabinToEdit={cabin} setEditingCabinId={setEditingCabinId} cabinId={cabin.id} editingCabinId={editingCabinId}/>,
+        document.getElementById("root"))}
         </div>
       ))}
     </>

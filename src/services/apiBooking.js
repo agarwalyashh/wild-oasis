@@ -1,5 +1,26 @@
-import { getToday } from "../utils/helpers";
+import { queryOptions } from "@tanstack/react-query";
+import { getToday } from "../utils/helper";
 import supabase from "./supabase";
+
+export async function getBookings({ filter, sortBy }) {
+  console.log(sortBy);
+  
+  // Here we do server/api side filtering and sorting
+  let query = supabase
+    .from("bookings")
+    .select("*,cabins(name),guests(fullName,email)"); // this way, we can get data from other tables connected using foreign key
+  if (filter)
+    query = query[filter.method || "eq"](filter.field, filter.value); // eq is for equal, gte is for greater than equal to and likewise we have other functions
+  
+  if(sortBy)
+    query=query.order(sortBy.field,{ascending:sortBy.direction=="asc"})
+  const { data, error } = await query;
+  if (error) {
+    console.log(error);
+    throw new Error("Bookings could not be loaded");
+  }
+  return data;
+}
 
 export async function getBooking(id) {
   const { data, error } = await supabase

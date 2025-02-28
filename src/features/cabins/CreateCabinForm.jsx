@@ -110,7 +110,7 @@ function CreateCabinForm({
       )}
       <div
         ref={ref}
-        className="flex flex-col rounded-xl shadow-2xl shadow-grey-200 bg-grey-0 font-poppins space-y-6 fixed top-30 p-10 w-300 z-1"
+        className="absolute left-100 flex flex-col rounded-xl shadow-2xl shadow-grey-200 bg-grey-0 font-poppins space-y-6 top-30 p-10 w-300 z-1"
       >
         <button
           className="bg-grey-100 rotate-45 cursor-pointer focus:!outline-none w-10 h-10 rounded-full absolute right-10 top-5"

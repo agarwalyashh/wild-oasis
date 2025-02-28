@@ -2,6 +2,7 @@ import { useState } from "react";
 import CabinTable from "../features/cabins/CabinTable";
 import CreateCabinForm from "../features/cabins/CreateCabinForm";
 import CabinOperations from "../features/cabins/CabinOperations";
+import { createPortal } from "react-dom";
 function Cabins() {
   const [showForm, setShowForm] = useState(false);
   
@@ -13,7 +14,7 @@ function Cabins() {
       </div>
       <CabinTable showForm={showForm} setShowForm={setShowForm}/>
       
-      {showForm && <CreateCabinForm setShowForm={setShowForm} showForm={showForm}/>}
+      {showForm && createPortal(<CreateCabinForm setShowForm={setShowForm} showForm={showForm}/>,document.getElementById("root"))}
     </div>
   );
 }

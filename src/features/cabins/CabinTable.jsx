@@ -14,7 +14,10 @@ function CabinTable({ showForm, setShowForm }) {
   });
 
   const [searchParams] = useSearchParams();
+  if(!cabins)
+    return;
 
+  // This is Client Side Filtering
   const filterValue = searchParams.get("discount") || "all";
   let filteredCabins;
   if (filterValue === "all") filteredCabins = cabins;

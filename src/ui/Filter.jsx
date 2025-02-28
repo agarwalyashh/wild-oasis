@@ -1,8 +1,15 @@
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
 function Filter({ filteredValue, options }) {
   const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    if (!searchParams.get(filteredValue)) {
+      searchParams.set(filteredValue, "all");
+      setSearchParams(searchParams);
+    }
+  }, [filteredValue, searchParams, setSearchParams]);
   function handleClick(value) {
     searchParams.set(filteredValue, value);
     setSearchParams(searchParams);
