@@ -106,7 +106,7 @@ function CreateCabinForm({
   return (
     <>
       {(showForm || cabinId === editingCabinId) && (
-        <div className="fixed inset-0 backdrop-blur-[5px]"></div>
+        <div className="fixed inset-0 backdrop-blur-[5px] z-1"></div>
       )}
       <div
         ref={ref}

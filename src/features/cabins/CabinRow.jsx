@@ -5,60 +5,93 @@ import { deleteCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
-import { MdDelete } from "react-icons/md";
-import { MdModeEdit } from "react-icons/md";
 import { createPortal } from "react-dom";
+import { CiMenuKebab } from "react-icons/ci";
+
+const menuItems = ["Edit", "Delete"];
 
 function CabinRow({ cabins }) {
-  const queryClient = useQueryClient();
-  const [editingCabinId, setEditingCabinId] = useState(null); 
+	const queryClient = useQueryClient();
+	const [editingCabinId, setEditingCabinId] = useState(null);
+	const [menuID, setMenuID] = useState(null);
 
-  const { isLoading: isDeleting, mutate } = useMutation({
-    mutationFn: (id) => deleteCabin(id),
-    onSuccess: () => {
-      toast.success("Cabin deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["cabin"] });
-    },
-    onError: () => toast.error("Something went wrong while deleting cabin"),
-  });
+	const { mutate } = useMutation({
+		mutationFn: (id) => deleteCabin(id),
+		onSuccess: () => {
+			toast.success("Cabin deleted successfully");
+			queryClient.invalidateQueries({ queryKey: ["cabin"] });
+		},
+		onError: () => toast.error("Something went wrong while deleting cabin"),
+	});
 
-  return (
-    <>
-      {cabins?.map((cabin) => (
-        <div key={cabin.id}>
-          <div
-            className="grid gap-4 grid-cols-6 font-poppins font-semibold justify-center items-center text-center mx-auto
+	function handleMenu(item, id) {
+		if (item === "Edit") {
+			setEditingCabinId(id);
+			setMenuID(null);
+			return;
+		}
+		if (item === "Delete") {
+			setEditingCabinId(id);
+			mutate(id);
+		}
+	}
+	function handleClick(id) {
+		if (!menuID) setMenuID(id);
+		else setMenuID(null);
+	}
+
+	return (
+		<>
+			{cabins?.map((cabin) => (
+				<div key={cabin.id}>
+					<div
+						className="grid gap-4 grid-cols-[0.4fr_0.5fr_1fr_0.5fr_0.3fr_0.3fr] font-poppins justify-center items-center text-center mx-auto
         bg-grey-0 w-full border-b-1 border-grey-300"
-            role="row"
-          >
-            <img src={cabin.image} className="w-40 h-25" />
-            <div>{cabin.name}</div>
-            <div>Fits up to {cabin.maxCapacity} guests</div>
-            <div>{formatCurrency(cabin.regularPrice)}</div>
-            <div className="text-green-700">{formatCurrency(cabin.discount)}</div>
-            <div className="gap-2 flex">
-              <button
-                onClick={() => setEditingCabinId(editingCabinId === cabin.id ? null : cabin.id)}
-                className="focus:!outline-none"
-              >
-              <span><MdModeEdit size={24} color="grey"/></span>
-              </button>
-              <span className="text-4xl">/</span>
-              <button
-                onClick={() => mutate(cabin.id)}
-                disabled={isDeleting}
-                className="focus:!outline-none"
-              >
-                <span><MdDelete size={24} color="grey"/></span>
-              </button>
-            </div>
-          </div>
-          {editingCabinId === cabin.id && createPortal(<CreateCabinForm cabinToEdit={cabin} setEditingCabinId={setEditingCabinId} cabinId={cabin.id} editingCabinId={editingCabinId}/>,
-        document.getElementById("root"))}
-        </div>
-      ))}
-    </>
-  );
+						role="row"
+					>
+						<img src={cabin.image} className="w-40 h-25" />
+						<div>{cabin.name}</div>
+						<div>Fits up to {cabin.maxCapacity} guests</div>
+						<div>{formatCurrency(cabin.regularPrice)}</div>
+						<div className="text-green-700">
+							{formatCurrency(cabin.discount)}
+						</div>
+						<div className="relative">
+							<span
+								className="cursor-pointer"
+								onClick={() => handleClick(cabin.id)}
+							>
+								<CiMenuKebab size={24} />
+							</span>
+							{menuID === cabin.id && (
+								<div className="w-45 bg-grey-0 flex flex-col gap-2 absolute top-5 left-8 z-1 rounded-md">
+									{menuItems.map((item, index) => (
+										<p
+											key={index}
+											className="hover:bg-grey-100 p-2 cursor-pointer"
+											onClick={() => handleMenu(item, cabin.id)}
+										>
+											{item}
+										</p>
+									))}
+								</div>
+							)}
+						</div>
+					</div>
+					{editingCabinId === cabin.id &&
+						createPortal(
+							<CreateCabinForm
+								cabinToEdit={cabin}
+								setEditingCabinId={setEditingCabinId}
+								cabinId={cabin.id}
+								editingCabinId={editingCabinId}
+							/>,
+							document.getElementById("root")
+						)}
+				</div>
+			))}
+		</>
+	);
 }
 
 export default CabinRow;

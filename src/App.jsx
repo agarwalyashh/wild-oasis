@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import AppLayout from "./ui/AppLayout";
 import { Toaster } from "react-hot-toast";
+import Booking from "./pages/Booking";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,10 @@ function App() {
         {
           path: "bookings",
           element: <Bookings />,
+        },
+        {
+          path: "bookings/:bookingId",
+          element: <Booking/>,
         },
         {
           path: "cabins",

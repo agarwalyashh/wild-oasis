@@ -69,7 +69,7 @@ function BookingTable() {
     <>
       <div role="table" className="border-1 border-gray-300 my-4">
         <div
-          className="grid gap-4 grid-cols-[0.3fr_0.7fr_1fr_0.7fr_0.3fr] font-sono font-semibold h-20 items-center text-start px-10"
+          className="grid gap-4 grid-cols-[0.3fr_0.7fr_1fr_0.5fr_0.3fr_0.2fr] font-sono font-semibold h-20 items-center text-start px-10"
           role="row"
         >
           <div>CABIN</div>

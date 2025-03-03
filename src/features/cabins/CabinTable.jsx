@@ -44,7 +44,7 @@ function CabinTable({ showForm, setShowForm }) {
     <>
       <div role="table" className="border-1 border-gray-300 my-4">
         <div
-          className="grid gap-4 grid-cols-6 font-poppins font-semibold h-20 items-center text-center"
+          className="grid gap-4 grid-cols-[0.4fr_0.5fr_1fr_0.5fr_0.3fr_0.3fr] font-poppins font-semibold h-20 items-center text-center"
           role="row"
         >
           <div></div>
