@@ -17,6 +17,7 @@ import Users from "./pages/Users";
 import AppLayout from "./ui/AppLayout";
 import { Toaster } from "react-hot-toast";
 import Booking from "./pages/Booking";
+import ProtectedRoute from "./ui/ProtectedRoute"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +31,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AppLayout />,
+      element: <ProtectedRoute><AppLayout /></ProtectedRoute>,
       errorElement: <PageNotFound />,
       children: [
         {
