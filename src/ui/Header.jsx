@@ -14,31 +14,37 @@ function Header() {
     onSuccess: () => {
       toast.success("Logout successful");
       queryClient.removeQueries("user");
-      navigate("/login",{replace:true});
+      navigate("/login", { replace: true });
     },
     onError: (err) => toast.error(err.message),
   });
-  
-  const {data} = useQuery({
-    queryKey:["user"],
-    queryFn:getCurrentUser
-  })
- const src=data.user_metadata.avatar ||  avatar
+
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: getCurrentUser,
+  });
+  const src = data.user_metadata.avatar || avatar;
   console.log(data);
-  
+
   return (
     <div className="row-span-1 p-6">
       <div className="flex justify-end items-center gap-4">
-        <img src={src} className="h-10 w-10"/>
+        <img src={src} className="h-16 w-16 rounded-full p-2" />
         <p>{data.user_metadata.fullName}</p>
-      <button className="cursor-pointer">
+        <button className="cursor-pointer" onClick={() => navigate("/account")}>
           <span>
-            <FaRegUser size={28} className="text-indigo-600 hover:bg-grey-300 rounded-md p-2"/>
+            <FaRegUser
+              size={28}
+              className="text-indigo-600 hover:bg-grey-300 rounded-md p-2"
+            />
           </span>
         </button>
-        <button onClick={()=>mutate()} className="cursor-pointer">
+        <button onClick={() => mutate()} className="cursor-pointer">
           <span>
-            <MdOutlineLogout size={28} className="text-indigo-600 hover:bg-grey-300 rounded-md p-1"/>
+            <MdOutlineLogout
+              size={28}
+              className="text-indigo-600 hover:bg-grey-300 rounded-md p-1"
+            />
           </span>
         </button>
       </div>
