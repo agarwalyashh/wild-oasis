@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSettings, updateSetting } from "../services/apiSettings";
-import Spinner from "../ui/Spinner";
+import { getSettings, updateSetting } from "../../services/apiSettings"
+import Spinner from "../../ui/Spinner"
 import toast from "react-hot-toast";
 
 function UpdateSettingsForm() {

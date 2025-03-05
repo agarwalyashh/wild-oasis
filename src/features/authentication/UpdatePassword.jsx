@@ -31,8 +31,6 @@ function UpdatePassword() {
   });
 
   function onSubmit(data) {
-    console.log(data);
-
     mutate(data.password);
   }
   return (

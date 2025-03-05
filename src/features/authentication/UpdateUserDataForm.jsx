@@ -34,7 +34,6 @@ function UpdateUserDataForm() {
     e.preventDefault();
     mutate({ name, image });
   }
-  console.log(data.user_metadata);
   return (
     <div className="bg-grey-0 p-10 w-[60%] flex flex-col gap-8">
       <form className="grid grid-cols-[0.4fr_0.6fr] rounded-lg gap-10">

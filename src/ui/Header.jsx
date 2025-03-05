@@ -24,7 +24,6 @@ function Header() {
     queryFn: getCurrentUser,
   });
   const src = data.user_metadata.avatar || avatar;
-  console.log(data);
 
   return (
     <div className="row-span-1 p-6">
