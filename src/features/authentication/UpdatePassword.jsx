@@ -82,7 +82,7 @@ function UpdatePassword() {
         <button
           className="p-3 bg-indigo-600 hover:bg-indigo-800 text-grey-0 rounded-md"
           type="submit"
-          disabled={isLoading}
+          disabled
         >
           Update Password
         </button>

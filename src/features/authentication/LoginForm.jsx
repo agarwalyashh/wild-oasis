@@ -5,8 +5,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("yashslg004@gmail.com");
+  const [password, setPassword] = useState("12345678");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation({
