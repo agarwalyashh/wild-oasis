@@ -2,6 +2,8 @@
 
 Oasis Restaurant App is a **Full-Stack Hotel Management Application** designed for hotel managers and employees to efficiently manage hotel operations. Built using **React** for the frontend, **Supabase** for backend services, and **TailwindCSS** for styling, this app provides an interactive and seamless experience for managing hotel bookings, rooms, and user authentication.
 
+Access it here : https://oasisrestaurant.vercel.app/
+
 ## ✨ Features
 
 ### 🔒 User Authentication & Management
